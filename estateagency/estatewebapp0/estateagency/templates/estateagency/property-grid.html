@@ -1,0 +1,217 @@
+{% extends 'estateapp/base.html' %}
+{% load static %}
+{% block title %} Property Grid {% endblock %}
+{% block body %}
+<!-- ======= Property Search Section ======= -->
+<div class="click-closed"></div>
+<!--/ Form Search Star /-->
+<div class="box-collapse">
+  <div class="title-box-d">
+    <h3 class="title-d">Search Property</h3>
+  </div>
+  <span class="close-box-collapse right-boxed bi bi-x"></span>
+  <div class="box-collapse-wrap form">
+
+    <form method="get">
+
+      {{ filtered_properties.form.as_p }}
+      <input type="submit" value="press">
+
+    </form>
+
+      {% for p in filtered_properties.qs %}
+        <h2>{{ p.location }}</h2>
+      {% endfor %}
+
+  </div>
+</div><!-- End Property Search Section -->>
+
+<!-- ======= Header/Navbar ======= -->
+<nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a class="navbar-brand text-brand" href="{% url 'estateapp:index' %}">Estate<span class="color-b">Agency</span></a>
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'estateapp:index' %}">View Properties</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'estateapp:property' %}">My Property</a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'estateapp:show_all_properties' %}">Search Property</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Hello, {{request.user}} | </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+
+  </div>
+</nav><!-- End Header/Navbar -->
+
+<main id="main">
+
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">Our Amazing Properties</h1>
+            <span class="color-text-a">Grid Properties</span>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'estateapp:index' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Properties Grid
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Intro Single-->
+
+  <!-- ======= Property Grid ======= -->
+  <section class="property-grid grid">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="grid-option">
+            <form>
+              <select class="custom-select">
+                <option selected>All</option>
+                <option value="1">New to Old</option>
+                <option value="2">For Rent</option>
+                <option value="3">For Sale</option>
+              </select>
+            </form>
+          </div>
+        </div>
+
+
+<!-- ======= Perform the loop for the properties ======= -->
+        {% for p in prop %}
+        <div class="col-md-4">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img src="{{ p.image.url }}" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                    <a href="{% url 'estateapp:property_single' p.id %}">{{ p.location }}</a>
+                  </h2>
+                </div>
+                <div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">rent | KSH. {{ p.amount }}</span>
+                  </div>
+                  <a href="{% url 'estateapp:property_single' p.id %}" class="link-a">Click here to view
+                    <span class="bi bi-chevron-right"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">Area</h4>
+                      <span>{{ p.area }}m
+                        <sup>2</sup>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Beds</h4>
+                      <span>{{ p.beds }}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Baths</h4>
+                      <span>{{ p.baths }}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Garages</h4>
+                      <span>{{ p.garage }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+
+      <div class="row">
+        <div class="col-sm-12">
+          <nav class="pagination-a">
+            <ul class="pagination justify-content-end">
+            <hr><br><br>
+              {% if prop.has_previous %}
+                 <a href="?page=1"> &laquo First &nbsp </a>
+                 <a href="?page={{ prop.previous_page_number }}">Previous &nbsp</a>
+              {% endif %}
+
+              Page {{ prop.number }} of {{ prop.paginator.num_pages }} &nbsp
+
+              {% if prop.has_next %}
+                 <a href="?page={{ prop.next_page_number }}"> Next &nbsp</a>
+                 <a href="?page={{ prop.paginator.num_pages }}">Last &raquo </a>
+                {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Property Grid Single-->
+
+</main><!-- End #main -->
+<!-- ======= Footer ======= -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright-footer">
+          <p class="copyright color-text-a">
+            &copy; Copyright
+            <span class="color-a">EstateAgency</span> All Rights Reserved.
+          </p>
+        </div>
+        <div class="credits">
+          <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=EstateAgency
+        -->
+          Powered by <a href="https://technerv.co.ke/">TECHNERV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer><!-- End  Footer -->
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+{% endblock %}

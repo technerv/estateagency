@@ -1,0 +1,74 @@
+{%  extends 'estateapp/base.html' %}
+{% load static %}
+{% block body %}
+
+{% block navbar %}
+<nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a class="navbar-brand text-brand" href="{% url 'estateapp:index' %}">Estate<span class="color-b">Agency</span></a>
+
+  </div>
+</nav><!-- End Header/Navbar -->
+{% endblock %}
+
+<!-- ======= Property Search Section ======= -->
+<div class="container">
+    <br><br><br><br><br><br>
+  <!-- Content here -->
+  <div class="login--wrapper">
+    <form method="post" action="" class="form">
+        <h3 class="title-d">Login</h3><br>
+        {{ form.as_p }}
+          {% csrf_token %}
+
+      <button type="submit" class="btn btn-primary">Submit</button><br><br>
+      <p>Don't Have An Account? <a href="">Register</a></p>
+    </form>
+
+  </div>
+
+  {% for message in messages %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+  </div>
+{% endfor %}
+
+</div>
+
+</main><!-- End #main -->
+<!-- ======= Footer ======= -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright-footer">
+          <p class="copyright color-text-a">
+            &copy; Copyright
+            <span class="color-a">EstateAgency</span> All Rights Reserved.
+          </p>
+        </div>
+        <div class="credits">
+          <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=EstateAgency
+        -->
+          Powered by <a href="https://technerv.co.ke/">TECHNERV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer><!-- End  Footer -->
+
+
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}

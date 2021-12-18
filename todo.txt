@@ -1,0 +1,159 @@
+Slugify
+-ensure the urls are slugified
+
+Ratings
+-place a ratings review on every property
+
+Admin Dashboard
+-to display summary of the app. Install AdminLTE bootstrap theme template
+-separate super agent content view from normal agent content view
+
+Authentication & Authorization
+- User Login and registration
+- create a new app called accounts to store user details.
+- new user registration / login / logout feature. allow only authenicated users to authorize login the app.
+- ensure only content showed by agent is shown on his dashboard.
+
+Search
+- ensure that once the search page is clicked, there are no results already showing. it should only allow Search
+results once the user has clicked the search button.
+- check whether it is possible to do ImageFilter from django filters in order to display property image on the search results
+
+Agent
+- display agent grid and single agent detail.
+
+API
+- develop a REST API to be able to allow other applications to access the app in JSON format.
+
+SOLVE THIS!!!
+You are authenticated as johndoe, but are not authorized to access this page. Would you like to login to a different account?
+
+
+
+
+
+# Login User.
+@csrf_exempt
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def login(request):
+    form = UserLoginForm(request.POST or None)
+    page = 'accounts:login'
+
+    if request.method == 'POST':
+
+        if form.is_valid():
+            #username = request.POST['username']
+            #password = request.POST['password1']
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.info(request, 'Successfully Logged In')
+                return redirect("estateapp:index")
+            else:
+                messages.info(request, 'Invalid credentials')
+                return redirect('accounts.login')
+        else:
+            messages.info(request, 'Error Validating Form')
+            #return redirect('accounts.login')
+    return render(request, 'estateapp/login.html', {"page":page})
+
+
+
+
+
+
+
+
+
+
+
+
+
+def register(request):
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        email = request.POST['email']
+
+        if password1==password2:
+
+            if User.objects.filter(username=username).exists():
+                messages.info(request, 'Username Taken')
+                return redirect('accounts:register')
+                #print('Username taken')
+            elif User.objects.filter(email=email).exists():
+                #print('Email taken')
+                messages.info(request, 'Email Taken')
+                return redirect('accounts:register')
+            else:
+                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
+                user.save();
+                messages.info(request, 'New User Created')
+                #print('User created')
+                return redirect('accounts.login')
+        else:
+            messages.info(request, 'Password not matching ...')
+            return redirect('accounts:register')
+        return redirect('/')
+
+    else:
+        return render(request, 'estateapp/register.html')
+
+
+
+        <form method="post" class="form">
+          {% csrf_token %}
+            <h3 class="title-d">Register</h3><br>
+            <div class="form-group">
+              <label for="exampleInputEmail1">First Name</label>
+              <input type="text" class="form-control" id="exampleInputText1" name="first_name" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Last Name</label>
+              <input type="text" class="form-control" id="exampleInputText1" name="last_name" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" id="exampleInputText1" name="email" aria-describedby="emailHelp">
+            </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Username</label>
+            <input type="text" class="form-control" id="exampleInputText1" name="username" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" name="password1" class="form-control" id="exampleInputPassword1">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Confirm Password</label>
+            <input type="password" name="password2" class="form-control" id="exampleInputPassword1">
+          </div><br>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <p>Already Have An Account? <a href="{% url 'accounts:login' %}">Login Here</a></p>
+        </form>
+
+        <div class="login--wrapper">
+          <form method="post" action="{% url 'accounts:login' %}" class="form">
+            {% csrf_token %}
+              <h3 class="title-d">Login</h3><br>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" id="exampleInputText1" name="username" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" name="password1" class="form-control" id="exampleInputPassword1">
+            </div><br>
+            <button type="submit" class="btn btn-primary">Submit</button><br><br>
+            <p>Don't Have An Account? <a href="{% url 'accounts:register' %}">Register</a></p>
+          </form>
+
+        </div>

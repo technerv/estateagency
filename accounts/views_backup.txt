@@ -1,0 +1,83 @@
+from django.views.decorators.cache import cache_control
+from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_or_404
+from django.contrib.auth.models import User, auth
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+
+#from django.contrib.auth.forms import UserCreationForm
+from .forms import UserCreationForm
+
+
+# Register New User
+@csrf_exempt
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def register(request):
+    #msg = None:
+    page = 'accounts:register'
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            msg = "User Created"
+            return redirect('accounts:login')
+        else:
+            msg = "Form is not valid"
+    else:
+        form = UserCreationForm()
+    context = {
+        "form": form,
+        "page": page,
+}
+    return render(request, 'estateapp/register.html', context)
+
+# Log out User
+@csrf_exempt
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def logout(request):
+    auth.logout(request)
+    messages.info(request, 'Successfully Logged Out')
+    #del request.session['user_id']
+    return redirect('accounts:login')
+
+
+#register new user
+def register(request):
+    #form = RegistrationForm(request.POST)
+
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        email = form.cleaned_data.get('email')
+        is_admin = form.cleaned_data.get('is_admin')
+        is_agent = form.cleaned_data.get('is_agent')
+        is_customer = form.cleaned_data.get('is_customer')
+        password1 = form.cleaned_data.get('password1')
+        password2 = form.cleaned_data.get('password2')
+
+        if password1 == password2:
+
+            if User.objects.filter(username=username).exists():
+                messages.info(request, 'Username Taken')
+                return redirect('accounts:register')
+                #print('Username taken')
+            elif User.objects.filter(email=email).exists():
+                #print('Email taken')
+                messages.info(request, 'Email Taken')
+                return redirect('accounts:register')
+            else:
+                user = User.objects.create(username=username, is_admin=is_admin, is_agent=is_agent, is_customer=is_customer, email=email, password=password1)
+                user.save();
+                messages.info(request, 'New User Created')
+                #print('User created')
+                return redirect('accounts.login')
+        else:
+            messages.info(request, 'Password not matching ...')
+            return redirect('accounts:register')
+        return redirect('/')
+
+    else:
+        return render(request, 'estateapp/register.html', {"form": form})
+
+
+    return render(request, "estateapp/register.html", {"form": form})

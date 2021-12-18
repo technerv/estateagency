@@ -1,0 +1,196 @@
+{%  extends 'estateapp/base.html' %}
+{% load static %}
+{% block body %}
+{% load estateapp_extras %}
+{% load crispy_forms_tags %}
+
+<!-- ======= Header/Navbar ======= -->
+{% block title %} Search Property {% endblock %}
+<nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a class="navbar-brand text-brand" href="{% url 'estateapp:index' %}">Estate<span class="color-b">Agency</span></a>
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'estateapp:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'estateapp:property' %}">Property</a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'estateapp:show_all_properties' %}">Search Property</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Hello, {{request.user}} | </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'estateapp:logout' %}">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+  </div>
+</nav><!-- End Header/Navbar -->
+
+
+<!-- ======= Property Search Section ======= -->
+<div class="container">
+  <!-- Content here -->
+  <br><br><br><br><br><br>
+  <h3 class="title-d">Search Property</h3>
+
+  <form method="get" class="form-a">
+          <div class="row">
+            <div class="col-md-12 mb-2">
+              <div class="form-group">
+                {{ filtered_properties.form.location | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.property_type | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.status | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.area | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.beds | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.baths | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.garage | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="form-group mt-3">
+                {{ filtered_properties.form.amount | as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-b">Search Property</button>
+            </div>
+          </div>
+        </form>
+  <br>
+
+    <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Location</th>
+      <th scope="col">Property Type</th>
+      <th scope="col">Status</th>
+      <th scope="col">Area</th>
+      <th scope="col">Beds</th>
+      <th scope="col">Baths</th>
+      <th scope="col">Garage</th>
+      <th scope="col">Price</th>
+      <th scope="col">Agent</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for p in property_page_obj %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{% url 'estateapp:property_single' p.id %}">{{ p.location }}</a></td>
+      <td>{{ p.property_type }}</td>
+      <td>{{ p.status }}</td>
+      <td>{{ p.area }}</td>
+      <td>{{ p.beds }}</td>
+      <td>{{ p.baths }}</td>
+      <td>{{ p.garage }}</td>
+      <td>{{ p.amount }}</td>
+      <td>{{ p.agent_id }}</td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+      <h2></h2>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if property_page_obj.has_previous %}
+        <a href="{% my_url 1 'page' request.GET.urlencode %}">&laquo; First</a>
+        <a href="{% my_url property_page_obj.previous_page_number 'page' request.GET.urlencode %}">Previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ property_page_obj.number }} of {{ property_page_obj.paginator.num_pages }}
+      </span>
+
+      {% if property_page_obj.has_next %}
+        <a href="{% my_url property_page_obj.next_page_number 'page' request.GET.urlencode %}">&raquo; Next</a>
+        <a href="{% my_url property_page_obj.paginator.num_pages 'page' request.GET.urlencode %}"> Last </a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+</main><!-- End #main -->
+<!-- ======= Footer ======= -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright-footer">
+          <p class="copyright color-text-a">
+            &copy; Copyright
+            <span class="color-a">EstateAgency</span> All Rights Reserved.
+          </p>
+        </div>
+        <div class="credits">
+          <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=EstateAgency
+        -->
+          Powered by <a href="https://technerv.co.ke/">TECHNERV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer><!-- End  Footer -->
+
+  {% for filter in myFilter %}
+    {{ filter.form }}
+  {% endfor %}
+
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock %}
