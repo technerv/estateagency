@@ -8,12 +8,10 @@ Django==3.2.9
 django-bootstrap4==21.1
 django-crispy-forms==1.13.0
 django-filter==21.1
-django-mpesa==2.0.8
 django-nose==1.4.7
 django-reversion==2.0.13
 django-uni-form==0.9.0
 djangorestframework==3.12.4
-djangorestframework-gis==0.11.2
 djappsettings==0.4.0
 djtables==0.1.2
 enum34==1.1.6
@@ -33,8 +31,6 @@ ptyprocess==0.5.2
 Pygments==2.2.0
 python-slugify==1.2.5
 pytz==2018.3
-RapidSMS==0.9.6a0
-rapidsms-xforms==0.3.0
 requests==2.26.0
 scandir==1.7
 simplegeneric==0.8.1

@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^json/$', views.json, name = 'json'),
 
     #Django Auth
-    url(r'^accounts/register/$', views.logout_view, name = 'register'),
+    url(r'^accounts/register/$', views.register, name = 'register'),
     url(r'^accounts/logout/$', views.logout_view, name = 'logout'),
 
 ]

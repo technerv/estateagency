@@ -27,9 +27,7 @@ API
 
 SOLVE THIS!!!
 You are authenticated as johndoe, but are not authorized to access this page. Would you like to login to a different account?
-
-
-
+ensure passwords are hashed after new user is registered
 
 
 # Login User.

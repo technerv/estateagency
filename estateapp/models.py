@@ -1,6 +1,7 @@
 from django.db import models
-#from accounts.models import User
 from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.urls import reverse
 
 #agent model
 class Agent(models.Model):
@@ -33,6 +34,8 @@ class Property(models.Model):
 
     )
 
+    property_title = models.CharField(max_length=60, verbose_name='Property Title')
+    slug = models.SlugField(max_length=250, null=True, blank=True, unique=True)
     property_id = models.IntegerField(verbose_name='Property ID')
     location = models.CharField(max_length=60, verbose_name='Location')
     property_type = models.CharField(max_length=60, choices=PROPERTY_TYPE, verbose_name='Property Type')
@@ -52,6 +55,16 @@ class Property(models.Model):
 
     def __str__(self):
         return str(self.property_id)
+
+    def get_absolute_url(self):
+        return reverse('estateapp:roperty_single', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        value = self.property_title
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+
 
     class Meta:
         verbose_name_plural = "Properties"

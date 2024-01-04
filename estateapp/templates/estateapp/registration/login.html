@@ -29,9 +29,8 @@
         {{ form|crispy }}
         <br>
       <button type="submit" class="btn btn-success">Login</button><br><br>
-      
     </form>
-
+    <p>New User? <a href="{% url 'estateapp:register' %}">Register</a></p>
   </div>
 
   {% for message in messages %}

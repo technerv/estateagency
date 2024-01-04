@@ -23,8 +23,9 @@
   <div class="login--wrapper">
     <form method="post" action="" class="form">
         <h3 class="title-d">Login</h3><br>
-        {{ form.as_p }}
+
           {% csrf_token %}
+          {{ form.as_p }}
 
       <button type="submit" class="btn btn-primary">Submit</button><br><br>
       <p>Don't Have An Account? <a href="">Register</a></p>

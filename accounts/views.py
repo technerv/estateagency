@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from estateapp.forms import RegistrationForm
+from estateapp.forms import RegistrationForm, LoginForm
 #from accounts.models import User
 
 

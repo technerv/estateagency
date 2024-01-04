@@ -16,6 +16,15 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ('first_name', 'last_name', 'email', 'username', 'password1', 'password2')
 
+    def create(self, validated_data):
+        password1 = validated_data.pop('password1',None)
+        instance = self.Meta.model(**validated_data)
+
+        if password1 is not None:
+            instance.set_password(password1)
+        instance.save()
+        return instance
+
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=63)
     password = forms.CharField(max_length=63, widget=forms.PasswordInput)

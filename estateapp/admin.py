@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Register your models here.
 @admin.register(Property)
 class PropertyModelAdmin(admin.ModelAdmin):
-    list_display = ('property_id', 'location', 'property_type',
+    list_display = ('property_title','property_id', 'location', 'property_type',
     'status','area','beds','baths','garage',
     'property_description','amenities','amount','image', 'date_created', 'agent_id', 'user')
 

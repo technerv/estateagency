@@ -25,22 +25,11 @@
   <div class="login--wrapper">
     <form method="post" class="form">
       {% csrf_token %}
-        <h3 class="title-d">Register</h3><br>
-        {{ form.as_p }}
-        {% for field in form %}
-        {% if page == 'accounts:register'  %}
-        <div class="form-group">
-          <label for="exampleInputEmail1">{{ field.label }}</label><br>
-          {{ field }}<br>
-        </div>
-        <br>
-      {% endif %}
-      {% endfor %}
+        <h3 class="title-d">Register New</h3><br>
+        {{ form|crispy }}
       <button type="submit" class="btn btn-primary">Submit</button><br><br>
-      <p>Already Have An Account? <a href="{% url 'accounts:login' %}">Login</a></p>
-
     </form>
-
+<p><a href="{% url 'login' %}">Login Here</a></p>
   </div>
 {% for message in messages %}
 
